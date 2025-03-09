@@ -1,0 +1,10 @@
+pyairtable
+jinja2
+fastapi
+deepl
+nltk
+pyperclip
+uvicorn
+toml
+langchain
+langchain_openai

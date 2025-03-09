@@ -1,0 +1,154 @@
+#slides{
+    font-family: arial,helvetica;
+    width: 80%;
+    display: flex;
+    margin: auto;
+}
+
+.slide{
+/*    text-align: center;*/
+    display: none;
+}
+
+.slide.active{
+    display: block;
+}
+
+#notification {
+/*    display: none;*/
+    padding: 10px 20px;
+    background-color: #f44336; /* 鲜红色背景 */
+    color: white; /* 白色文字 */
+    border-radius: 10px; /* 圆角边框 */
+    font-weight: bold; /* 粗体文字 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 轻微阴影效果 */
+    position: fixed; /* 固定在视口中 */
+    top: 20px; /* 顶部间距 */
+    right: 20px; /* 右侧间距 */
+    z-index: 1000; /* 确保在最上层 */
+}
+
+#goto-prev {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: #364f6b;
+  color: white;
+  cursor: pointer;
+}
+
+#goto-next {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: #364f6b;
+  color: white;
+  cursor: pointer;
+}
+
+.flex-container {
+    display: block;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+#logo {
+    float: left;
+}
+
+h1, h2 {
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+.grid {
+    display: grid;
+    margin-left: 0px;
+    margin-right: 60px;
+    margin-top: 30px;
+}
+
+label, input, button {
+    margin: 5px;
+}
+
+button {
+    background-color: #ffde7d;
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.important {
+    background-color: #f6416c;
+    color: white;
+}
+
+button.automation {
+    background-color: #00b8a9;
+    color: white;
+}
+
+h3 {
+    color: #f6416c;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.small-button {
+    padding: 5px 5px;
+    background-color: #555555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Tooltip 容器 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+ 
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.on-bottom2 {
+    top: 400%;
+}
+
+.on-bottom {
+    top: 50%;
+}
+ 
+/* 鼠标移动上去后显示提示框 */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
