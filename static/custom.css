@@ -1,6 +1,6 @@
 #slides{
     font-family: arial,helvetica;
-    width: 80%;
+/*    width: 80%;*/
     display: flex;
     margin: auto;
 }
@@ -65,9 +65,9 @@
     margin-right: 10vw;
 }
 
-#logo {
+/*#logo {
     float: left;
-}
+}*/
 
 h1, h2 {
     margin-left: 10vw;
@@ -85,15 +85,15 @@ label, input, button {
     margin: 5px;
 }
 
-button {
+/*button {
     background-color: #ffde7d;
     color: black;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
+}*/
+/*
 button.important {
     background-color: #f6416c;
     color: white;
@@ -103,10 +103,10 @@ button.automation {
     background-color: #00b8a9;
     color: white;
 }
-
-h3 {
+*/
+/*h3 {
     color: #f6416c;
-}
+}*/
 
 input[type="file"] {
     display: none;

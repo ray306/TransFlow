@@ -16,7 +16,7 @@ const clickWithAwait = async (element) => {
     }
 };
 
-async function auto_step1() {
+async function auto_stage1() {
     document.getElementById('notification').innerText = 'Step 1.1 fetching online glossary...'
     await clickWithAwait(document.getElementById('fetch_online_glossary'));
     // await document.getElementById('fetch_online_glossary').click();
@@ -44,7 +44,7 @@ async function auto_step1() {
     document.getElementById('notification').innerText = 'Step 1.4 annotation formatted'
 }
 
-async function auto_step2() {
+async function auto_stage2() {
     document.getElementById('notification').innerText = 'STEP 2 is running...'
 
     document.getElementById('notification').innerText = 'Step 2.1 translating...'
@@ -56,7 +56,7 @@ async function auto_step2() {
 
     document.getElementById('format_MT_article').click();
     // await sleep(1000);
-    document.getElementById('auto_step2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[0].click();
+    document.getElementById('auto_stage2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[0].click();
 
     document.getElementById('MT_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'});
     document.getElementById('notification').innerText = 'Step 2.1 translated...'
@@ -66,12 +66,12 @@ async function auto_step2() {
         document.getElementById('notification').innerText = 'Step 2.2 failed.'
         throw new Error();
     }
-    document.getElementById('auto_step2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[1].click();
+    document.getElementById('auto_stage2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[1].click();
     document.getElementById('prerevision_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
     document.getElementById('notification').innerText = 'STEP2 is done.'
 }
 
-async function auto_step3() {
+async function auto_stage3() {
     document.getElementById('notification').innerText = 'STEP 3 is running...'
     await clickWithAwait(document.getElementById('polish_button1'));
     if (document.getElementById('polished_article_analysis').value == '') {
@@ -83,12 +83,12 @@ async function auto_step3() {
     document.getElementById('polish_button2').click();
     await sleep(1000);
 
-    document.getElementById('auto_step3').parentElement.parentElement.querySelector('.copy_to_comparison').click();
+    document.getElementById('auto_stage3').parentElement.parentElement.querySelector('.copy_to_comparison').click();
     document.getElementById('polished_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
     document.getElementById('notification').innerText = 'STEP3 is done.'
 }
 
-async function auto_step4() {
+async function auto_stage4() {
     document.getElementById('notification').innerText = 'STEP 4 is running...'
     await clickWithAwait(document.getElementById('proof_button1'));
     if (document.getElementById('proofed_article_analysis').value == '') {
@@ -100,36 +100,40 @@ async function auto_step4() {
     document.getElementById('proof_button2').click();
     await sleep(1000);
 
-    document.getElementById('auto_step4').parentElement.parentElement.querySelector('.copy_to_comparison').click();
+    document.getElementById('auto_stage4').parentElement.parentElement.querySelector('.copy_to_comparison').click();
     document.getElementById('proofed_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
     sound_alarm();
     document.getElementById('notification').innerText = 'STEP4 is done.'
 }
 
-document.getElementById('auto_step1').addEventListener('click', async function() {
-    auto_step1();
+document.getElementById('auto_stage1').addEventListener('click', async function() {
+    auto_stage1();
 });
 
-document.getElementById('auto_step2').addEventListener('click', async function() {
-    auto_step2();
+document.getElementById('auto_stage2').addEventListener('click', async function() {
+    auto_stage2();
 });
 
-document.getElementById('auto_step3').addEventListener('click', async function() {
-    auto_step3();
+document.getElementById('auto_stage3').addEventListener('click', async function() {
+    auto_stage3();
 });
 
-document.getElementById('auto_step4').addEventListener('click', async function() {
-    auto_step4();
+document.getElementById('auto_stage4').addEventListener('click', async function() {
+    auto_stage4();
 });
 
-document.getElementById('auto_step_all').addEventListener('click', async function() {
-    switch_slide('next');
-    await auto_step1();
-    switch_slide('next');
-    await auto_step2();
-    switch_slide('next');
-    await auto_step3();
-    switch_slide('next');
-    await auto_step4();
+document.getElementById('auto_stage_all').addEventListener('click', async function() {
+    // switch_slide('next');
+    document.getElementById("slide1_pointer").click();
+    await auto_stage1();
+    // switch_slide('next');
+    document.getElementById("slide2_pointer").click();
+    await auto_stage2();
+    // switch_slide('next');
+    document.getElementById("slide3_pointer").click();
+    await auto_stage3();
+    // switch_slide('next');
+    document.getElementById("slide4_pointer").click();
+    await auto_stage4();
 
 });
