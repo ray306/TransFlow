@@ -247,20 +247,35 @@
         <div class="flex-container">
             <div class="grid">
                 <h4 class="text-danger">3.1 Please click on the red button to generate a prompt from the template and previous content
+                    <button type="button" class="process_prompt_general btn btn-danger" prompt-textarea-id="polish_preparation_prompt" article-textarea-id="prerevision_article|MT_article">Generate prompt and copy it</button></h4>
+                <button type="button" id="polish_preparation_button" class="process_prompt_general automation advanced_mode btn btn-success btn-sm" prompt-textarea-id="polish_preparation_prompt" article-textarea-id="prerevision|MT_article" automation='true' result-textarea-id="polish_preparation">Auto-generate/execute the prompt and send the response to the next textarea</button>
+                <label for="polish_preparation_prompt">Prompt template:</label>
+                <textarea id="polish_preparation_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>
+            </div>
+            <div class="grid">
+                <h4 class="text-danger">3.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <br>
+                <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">3.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
+                <textarea id="polish_preparation" rows="10" cols="50"></textarea>
+                <h4 class="text-danger">3.4 Extract the information from the responsed text above
+                <button type="button" id="extract_polishing_information" class="btn btn-danger">Extract</button></h4> 
+            </div>
+            <div class="grid">
+                <h4 class="text-danger">3.5 Please click on the red button to generate a prompt from the template and previous content
                     <button type="button" class="process_prompt_general btn btn-danger" prompt-textarea-id="polish_prompt" article-textarea-id="prerevision_article|MT_article">Generate prompt and copy it</button></h4>
-                <button type="button" id="polish_button1" class="process_prompt_general automation advanced_mode btn btn-success btn-sm" prompt-textarea-id="polish_prompt" article-textarea-id="prerevision|MT_article" automation='true' result-textarea-id="polished_article_analysis">Auto-generate/execute the prompt and send the response to the next textarea</button>
+                <button type="button" id="polish_analysis_button" class="process_prompt_general automation advanced_mode btn btn-success btn-sm" prompt-textarea-id="polish_prompt" article-textarea-id="prerevision|MT_article" automation='true' result-textarea-id="polished_article_analysis">Auto-generate/execute the prompt and send the response to the next textarea</button>
                 <label for="polish_prompt">Prompt template:</label>
                 <textarea id="polish_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>
             </div>
             <div class="grid">
-                <h4 class="text-danger">3.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <h4 class="text-danger">3.6 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
                     <br>
                 <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">3.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                 <textarea id="polished_article_analysis" rows="10" cols="50"></textarea>
             </div>
             <div class="grid">
-                <h4 class="text-danger">3.4 Extract the article from the responsed text above
-                    <button type="button" id="polish_button2" class="selectVersion btn btn-danger" article-textarea-id="polished_article_analysis" result-textarea-id="polished_article">Extract</button></h4>         
+                <h4 class="text-danger">3.7 Extract the article from the responsed text above
+                    <button type="button" id="selectVersion" class="btn btn-danger" article-textarea-id="polished_article_analysis" result-textarea-id="polished_article">Extract</button></h4>         
 
                 <label for="polished_article">Polished:</label>
                 <textarea id="polished_article" xml-label="p_?" operations='+,+' rows="10" cols="50"></textarea>
@@ -301,7 +316,7 @@
             </div>
             <div class="grid">
                 <h4 class="text-danger">4.4 Extract the article from the responsed text above
-                    <button type="button" id="proof_button2" class="construct_proofed_version btn btn-danger" article-textarea-id="proofed_article_analysis" result-textarea-id="proofed_article">Extract</button></h4>                
+                    <button type="button" id="construct_proofed_version" class="btn btn-danger" article-textarea-id="proofed_article_analysis" result-textarea-id="proofed_article">Extract</button></h4>
 
                 <label for="proofed_article">Proofreaded:</label>
                 <textarea id="proofed_article" xml-label="p_?" operations='+,-,concat' rows="10" cols="50"></textarea>
@@ -344,7 +359,6 @@
 const replacements = {
     "Translation AI Workflow, Let Translation Flows Effortlessly": "翻译全流程AI自动化，让翻译更简单",
     "(English->Chinese)": "(此版本为英文译中文)",
-    "Enter the original text": "输入原文",
     "for ease of processing, there should be at least one blank line between paragraphs": "为了便于处理，不同段落之间应有至少一个空行",
     "Get the key information that helps the translation": "获取有助于翻译的重要信息",
 
@@ -355,7 +369,7 @@ const replacements = {
 
     "This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App.": "本应用需与聊天助手（如 ChatGPT）进行问答。在手动模式下，应用无法直接连接聊天助手，你需要手动将应用生成的 Prompt 发送给聊天助手，并将其回复传回应用。",
     "Enter the original text and click here to automate the entire translation process": "输入原文后点此自动完成所有流程",
-    "Enter the original text in an input field": "在输入框中输入原始文本",
+    "Enter the original text": "输入原文",
     "Click the right arrow to start the next Stage": "点击右侧箭头进入下一阶段",
     "Read the instruction in red for each step and follow the instructions": "阅读每个步骤的红色文字，按照文字指示操作",
     "Go to the next step": "进入下一步骤",
@@ -373,6 +387,7 @@ const replacements = {
     "Generate prompt and copy it": "生成并复制Prompt",
     "Auto-generate/execute the prompt and send the response to the next textarea": "自动生成 / 执行prompt并把回复填入后面的文本框",
 
+    "Extract the information from the responsed text above": "从回复的文本中提取信息",
     "Extract the article from the responsed text above": "从回复的文本中提取文章",
     "Extract the annotations from the responsed text above": "从回复的文本中提取注释",
     "When the response of chatbot is ready, copy the response and paste it below": "聊天助手完成回复后，请复制回复并粘贴在下面",
@@ -407,6 +422,13 @@ const replacements = {
     "Help": "帮助",
     "Explanation": "说明",
 
+    "Required": "必要信息",
+    "Annotation": "注释",
+    "Category": "文章分类",
+    "Wording": "写作风格",
+    "Polishing scheme": "润色方案",
+    "Glossary": "词汇表",
+
     "Raw document": "原文",
     "Simple revision": "初步修改稿",
     "Preliminary Translated": "初稿",
@@ -416,12 +438,6 @@ const replacements = {
     "Polishing": "润色",
     "Proofreading": "校对",
     
-    "Required": "必要信息",
-    "Annotation": "注释",
-    "Category": "文章分类",
-    "Wording": "写作风格",
-    "Polishing scheme": "润色方案",
-    "Glossary": "词汇表",
     "": "",
     "": "",
     "": "",
@@ -451,14 +467,13 @@ var general_note = `## 当你输出上述结构时，请注意保证：
     - 禁止改变文章原意；
     - 禁止擅自将较长内容总结，或擅自将较短内容扩展；
     - 如果文中出现${f_labels["source_language2"]}（包括名称、术语、参考文献、参考文献在正文中的引用、等等），说明这些是不需要翻译的部分，请完整保留其原文；
-    - 请遵照\`<glossary>\`（即翻译词汇表）和\`<do_not_translate>\`（即不可译内容）的翻译参考；
+    - 请遵照\`<glossary>\`（即翻译词汇表）和\`<do_not_translate>\`（即不可译内容）提供的翻译指示；
 - 格式完整：
     - 禁止删除原文中的标题、列表、链接、粗体、斜体、表格等所有Markdown格式标记，不要进行任何破坏格式的操作；
     - 如果文中出现引用、注释或脚注，请完整保留它们的原文内容和标签格式；
     - 文中有些内容出现在括号之间，它们也很重要，禁止擅自删除括号之间的内容。
 
 这一任务对我非常关键，完整完成任务后你将得到10000美元的酬劳。请深呼吸，然后充分展现你的写作技能，认真完成任务并输出。`
-
 
 var step1_task234 = `<*Task2*>
 
@@ -480,14 +495,13 @@ var step1_task234 = `<*Task2*>
 
 在你看到的这篇${f_labels["source_language2"]}文章中有一些需要特别注意的词汇（诸如术语/命名/习惯表达）不能被直接翻译，而是有在这个领域中特定的翻译方式。我已经提供了一个初步的**词汇表参考**表格，你需要阅读文章并补全这个词汇表。
 
-
 注意：
 - 如果**词汇表参考**中提供了一个${f_labels["source_language2"]}单词在不同领域内多种翻译，在新的词汇表中只保留和文章最匹配的那个领域所在的行，删除其它的行；
-- 如果**词汇表参考**中没有提供这个${f_labels["source_language2"]}单词的对应翻译，就在新的词汇表中根据给定领域和文章的内容给出合适的翻译；
+- 如果**词汇表参考**中没有提供这个${f_labels["source_language2"]}单词的对应翻译，就在新的词汇表中根据文章的领域和单词所在的语境给出合适的翻译；
+- 如果同一个单词在文章就有多个对应翻译，请在新的词汇表中分别列出这些翻译，并在\`Category\`中做出区分；
 - 不要在新的词汇表中擅自改变**词汇表参考**中已经提供的翻译，即使提供的翻译也是${f_labels["source_language2"]}；
 - 对于你补充的词汇翻译方式，应从\`<category>\`里给出的文章领域中挑选一个较细的领域，标记在\`Category\`栏中；
 - 有些${f_labels["source_language2"]}词汇在该文章的语境是不需要翻译的，请你准确找出这些词汇并在\`Translation\`栏中直接复制这些${f_labels["source_language2"]}词汇；
-- 除此之外，还有些${f_labels["source_language2"]}词汇在该文章的语境中需要翻译，但在翻译后的文本中应当用括号加上其${f_labels["source_language2"]}原文。请你准确找出这些词汇并加入词汇表。
 </任务描述>
 
 <*输出格式*>
@@ -619,7 +633,7 @@ consolidate_mark:false
 
 document.getElementById('prerevision_prompt').value = `<*参考材料*>
 
-下面你将看到的内容是一篇结构化的文章。该结构有3个主要层次： 
+下面的内容是一篇结构化的文章。该结构有3个主要层次： 
   a. 用\`<article>\`XML标签包括整篇文章的内容；
   b. 用\`<p_[i]>\`XML标签表示文章中每个段落，其中'i'代表段落编号；
   c. 用\`[${f_labels["SOURCE"]}]:\`和\`[${f_labels["TRANSLATION"]}]:\`分别指示句子的${f_labels["source_language2"]}原句和${f_labels["target_language2"]}机翻版本。
@@ -632,11 +646,9 @@ sentence_segment: false,}@
 ------
 ------
 
-下面你将看到的内容是对该文章的注释，包含两个主要层次： 
-  a. 用\`<annotation>\`囊括所有的内容；
-  b. 分别用\`<wording>\`、\`<category>\`、\`<tags>\`、\`<abstract>\`、\`<glossary>\`、\`<do_not_translate>\`标注特定的内容。
----
+下面的内容是对该文章的注释：
 @{annotation}@
+---
 
 </*参考材料*>
 
@@ -662,7 +674,7 @@ sentence_segment: false,}@
     如果你发现了某个错误但认为这是作者为了某种特殊表达故意设计的，就忽略这个错误。
 
 - *任务目标2*：有的错误源于${f_labels["target_language2"]}和${f_labels["source_language2"]}在用法上的差异，所以你的第二个目标是润色${f_labels["target_language2"]}翻译。润色后的翻译稿应当更加符合${f_labels["target_language2"]}语言习惯、更加符合原文要表达的意思、也要保留原文的Markdown格式。
-你的润色方案如下：
+    你应当参考下面的语言润色方案：
 @{polishing_scheme}@
 
 总的来说，你的任务是从\`<p_1>\`开始，根据每对原文和翻译的语义一致性，识别出该翻译相比原文的任何遗漏、冗余、语义扭曲、或其它的错误，修正发现的问题（*任务目标1*），并使其符合${f_labels["target_language2"]}语言习惯以及符合原文的意思（*任务目标2*）；
@@ -672,7 +684,7 @@ sentence_segment: false,}@
 <*输出格式*>
 ## 你的输出应当符合下面的格式：
     a. 从\`<p_1>\`开始，对于输入的\`<article>\`中的每个段落（\`<p_[i]>\`），输出带编号的段落开始标记\`<p_[i]>\`。
-    b. 在段落开始标记后，直接输出该段落符合任务要求的修正文本。
+    b. 在段落开始标记后，直接输出该段落符合任务要求的修正文本（注意这里不需要输出原文）。
 
 ${general_note}
 
@@ -701,23 +713,21 @@ consolidate_mark:false
 
 document.getElementById('LLM_translation_prompt').value = `<*参考材料*>
 
-下面你将看到的内容是一篇结构化的文章。该结构有3个主要层次： 
+下面的内容是一篇结构化的文章。该结构有3个主要层次： 
   a. 用\`<article>\`XML标签包括整篇文章的内容；
   b. 用\`<p_[i]>\`XML标签表示文章中每个段落，其中'i'代表段落编号；
 
 ---
-@{texts: [raw_article, MT_article],
+@{texts: [raw_article],
 languages: ['${f_labels["source_language"]}'],
 names: ['${f_labels["SOURCE"]}'],
 sentence_segment: false,}@
 ------
 ------
 
-下面你将看到的内容是对该文章的注释，包含两个主要层次： 
-  a. 用\`<annotation>\`囊括所有的内容；
-  b. 分别用\`<wording>\`、\`<category>\`、\`<tags>\`、\`<abstract>\`、\`<glossary>\`、\`<do_not_translate>\`标注特定的内容。
----
+下面的内容是对该文章的注释：
 @{annotation}@
+---
 
 </*参考材料*>
 
@@ -780,26 +790,29 @@ close_chat:true
 consolidate_mark:false
 `;
 
-document.getElementById('polish_prompt').value = `<*参考材料*>
+document.getElementById('polish_preparation_prompt').value = `<*参考材料*>
 
-下面你将看到的内容是一篇结构化的文章。该结构有3个主要层次： 
-  a. 用\`<article>\`包括整篇文章的内容；
-  b. 用\`<p_[i]>\`囊括各个段落，其中'i'代表段落编号；
-  c. 用\`<s_[i]>\`和\`</s_[i]>\`囊括当前段落内的各个句子，其中'i'代表句子编号；
+下面的内容是一篇结构化的文章。该结构有3个主要层次： 
+  a. 用\`<article>\`XML标签包括整篇文章的内容；
+  b. 用\`<p_[i]>\`XML标签表示文章中每个段落，其中'i'代表段落编号；
+  c. 用\`[${f_labels["SOURCE"]}]:\`和\`[${f_labels["TRANSLATION"]}]:\`分别指示句子的${f_labels["source_language2"]}原句和${f_labels["target_language2"]}机翻版本。
 
 ---
-@{texts: [prerevision_article],
-languages: ['${f_labels["target_language"]}'],
-names: [''],
-sentence_segment: true,}@
-
+@{texts: [raw_article, prerevision_article],
+languages: ['${f_labels["source_language"]}', '${f_labels["target_language"]}'],
+names: ['${f_labels["SOURCE"]}', '${f_labels["TRANSLATION"]}'],
+sentence_segment: false,}@
 ------
 ------
 ------
 
-下面你将看到的内容是对该文章的注释，包含两个主要层次： 
-  a. 用\`<annotation>\`囊括所有的内容；
-  b. 分别用\`<wording>\`、\`<category>\`、\`<tags>\`、\`<abstract>\`、\`<glossary>\`、\`<do_not_translate>\`标注特定的内容。
+下面的内容是对该文章的原本的润色方案：
+@{polishing_scheme}@
+
+---
+下面的内容是对该文章的原本的注释：
+@{annotation}@
+
 ---
 
 </*参考材料*>
@@ -815,32 +828,18 @@ sentence_segment: true,}@
 
 <*任务介绍*>
 ## 目标
-你的主要目标是对提供的这篇Markdown格式的${f_labels["target_language2"]}译稿从\`<p_1>\`开始进行润色。
-现有一个初步的润色方案如下：
-@{polishing_scheme}@
+请你阅读提供的译稿，根据其语言问题对原本的润色方案做出改进，提供一个新的润色方案。
+然后对原本的注释做出改进，提供一组新的注释。
 
-第1步，请你阅读提供的译稿，根据其语言问题对原有润色方案做出改进，提供一个新的润色方案。
-第2步，请你遵照新的润色方案的要求，在保留文章原意和Markdown格式的前提下把译稿原文润色出2个不同的版本。
-第3步，你要在译稿原文和这2个重写版本中挑选出最合适的版本。
 </*任务介绍*>
 
 <*输出格式*>
 ## 你的输出应当符合下面的格式：
-1. 输出\`<new_polishing_scheme>\`
-    1.1 在\`[当前译稿分析]\`中输出分析；
-    1.2. 确定新的润色方案。
-2. 从\`<p_1>\`开始，对于输入的\`<article>\`中的每个段落（\`<p_[i]>\`），输出带编号的段落开始标记\`<p_[i]>\`。
-3. 对于该段落的每个句子，依次执行下面操作：
-    3.1. 复制句子开始标记\`<s_[j]>\`;
-    3.2. 输出标记\`[${f_labels["VERSION"]}1]:\`，复制原始版本的句子；
-    3.3. 输出标记\`[${f_labels["VERSION"]}2]:\`，把原始版本的内容重写为版本1；
-    3.4. 输出标记\`[${f_labels["VERSION"]}3]:\`，把原始版本的内容重写为版本2；
-    3.5. 输出\`${f_labels["ANALYSIS"]}：\`，然后对比不同版本，最后挑选出哪个版本没有丢失信息且文字地道；
-    3.6. 输出\`${f_labels["SELECTION"]}：\`，并在其后根据上一步（3.2）的分析结果输出最佳版本的序号（大于等于1）；
-    3.7. 如果段落没有结束，跳到下一个句子。
-4. 复制段落结束标记\`</段落_[i]>\`。
 
-${general_note}
+1. 输出\`<new_polishing_scheme>\`
+  1.1. 在\`[当前译稿分析]\`中输出分析；
+  1.2. 确定新的润色方案。
+2. 输出\`<new_annotation>\`，即新的注释
 
 ## 输出的例子如下：
 \`\`\`
@@ -850,6 +849,88 @@ ${general_note}
     [润色风格]: xxxxx
     [润色策略]: xxxxx
 </new_polishing_scheme>
+<new_annotation>
+    <wording>xxxxx</wording>
+    <category>xxxxx</category>
+    <tags>xxxxx</tags>
+    <glossary>xxxxx</glossary>
+    <do_not_translate>xxxxx</do_not_translate>
+    <abstract>xxxxx</abstract>
+</new_annotation>
+\`\`\`
+</*输出格式*>
+
+*以下是输出内容*
+---
+<new_polishing_scheme>
+(请继续...)
+
+completion_mark:@{last_paragraph}@
+new_chat:true
+close_chat:true
+consolidate_mark:false
+`;
+
+document.getElementById('polish_prompt').value = `
+
+<*参考材料*>
+
+下面你将看到的内容是一篇结构化的文章。该结构有3个主要层次： 
+  a. 用\`<article>\`包括整篇文章的内容；
+  b. 用\`<p_[i]>\`囊括各个段落，其中'i'代表段落编号；
+  c. 用\`<s_[i]>\`和\`</s_[i]>\`囊括当前段落内的各个句子，其中'i'代表句子编号；
+
+---
+@{texts: [prerevision_article],
+languages: ['${f_labels["target_language"]}'],
+names: [''],
+sentence_segment: true,}@
+
+---
+---
+---
+下面的内容是对该文章的注释：
+@{annotation}@
+---
+
+</*参考材料*>
+
+<*角色*>
+你是一名作家：
+- 母语为${f_labels["target_language2"]}，语言表达能力极高，有近50年的现代${f_labels["target_language2"]}写作经验；
+- 擅长使用非常地道的句子和用词去修改和润色翻译腔很重的文章；
+- 习惯的写作风格是 @{wording}@；
+- 擅长@{category}@领域的${f_labels["target_language2"]}和${f_labels["source_language2"]}写作；
+- 熟悉Markdown和XML格式。
+</*角色*>
+
+<*任务介绍*>
+## 目标
+你的主要目标是对提供的这篇Markdown格式的${f_labels["target_language2"]}文章从\`<p_1>\`开始进行润色。
+你的润色方案如下：
+@{polishing_scheme}@
+
+请你遵照这个润色方案的要求，在保留文章原意和Markdown格式的前提下把原文润色出2个不同的版本。
+最后，你要在原文和这2个重写版本中挑选出最合适的版本.
+</*任务介绍*>
+
+<*输出格式*>
+## 你的输出应当符合下面的格式：
+1. 从\`<p_1>\`开始，对于输入的\`<article>\`中的每个段落（\`<p_[i]>\`），输出带编号的段落开始标记\`<p_[i]>\`。
+2. 对于该段落的每个句子，依次执行下面操作：
+    2.1. 复制句子开始标记\`<s_[j]>\`;
+    2.2. 输出标记\`[${f_labels["VERSION"]}1]:\`，复制原始版本的句子；
+    2.3. 输出标记\`[${f_labels["VERSION"]}2]:\`，把原始版本的内容重写为版本1；
+    2.4. 输出标记\`[${f_labels["VERSION"]}3]:\`，把原始版本的内容重写为版本2；
+    2.5. 输出\`${f_labels["ANALYSIS"]}：\`，然后对比不同版本，最后挑选出哪个版本没有丢失信息且文字地道；
+    2.6. 输出\`${f_labels["SELECTION"]}：\`，并在其后根据上一步（2.2）的分析结果输出最佳版本的序号（大于等于1）；
+    2.7. 如果段落没有结束，跳到下一个句子。
+3. 复制段落结束标记\`</段落_[i]>\`。
+
+${general_note}
+
+## 输出的例子如下：
+\`\`\`
 <p_1>
     <s_1>
         [${f_labels["VERSION"]}1]: ## Lorem
@@ -874,9 +955,8 @@ ${general_note}
 
 *以下是输出内容*
 ---
-<new_polishing_scheme>
+<p_1>
 (请继续...)
-
 completion_mark:@{last_paragraph}@
 new_chat:true
 close_chat:true
@@ -885,7 +965,7 @@ consolidate_mark:false
 
 document.getElementById('proof_prompt').value = `<*参考材料*>
 
-下面你将看到的内容是一篇结构化的文章。该结构有4个主要层次： 
+下面的内容是一篇结构化的文章。该结构有4个主要层次： 
   a. 用\`<article>\`XML标签包括整篇文章的内容；
   b. 用\`<p_[i]>\`XML标签表示文章中每个段落，其中'i'代表段落编号；
   c. 用\`[s_[j]]:\`表示段落中的每个句子；
@@ -901,11 +981,9 @@ sentence_segment: true,}@
 ------
 ------
 
-下面你将看到的内容是对该文章的注释，包含两个主要层次： 
-  a. 用\`<annotation>\`囊括所有的内容；
-  b. 分别用\`<wording>\`、\`<category>\`、\`<tags>\`、\`<abstract>\`、\`<glossary>\`、\`<do_not_translate>\`标注特定的内容。
----
+下面的内容是对该文章的注释：
 @{annotation}@
+---
 
 </*参考材料*>
 
@@ -969,6 +1047,9 @@ close_chat:true
 consolidate_mark:false
 `;  
 
+//     - \`<glossary>\`（即翻译词汇表）中有些表达用括号标记了${f_labels["source_language2"]}原文。这些表达首次在译文中出现时需要附带括号内的${f_labels["source_language2"]}原文，后续出现时则仅使用译文，无需重复${f_labels["source_language2"]}。
+// - 有些${f_labels["source_language2"]}词汇在翻译后的文本中在首次出现时标注${f_labels["source_language2"]}，比如${f_labels["target_language2"]}翻译可能引发歧义，或读者对翻译很可能不熟悉。请你准确找出这些词汇并在其加入\`Translation\`栏中用括号带上${f_labels["source_language2"]}标注。
+
     function zip(arrays) {
         return arrays[0].map(function(_,i){
             return arrays.map(function(array){return array[i]})
@@ -997,7 +1078,6 @@ consolidate_mark:false
             // 创建并挂载一个临时的 Promise 用于阻塞
             event.promise = new Promise(async (resolve) => {
                 document.getElementById('format_annotation').click();
-                await sleep(500);
 
                 let annotation = document.getElementById('annotation').value;
                 let raw_article = document.getElementById('raw_article').value;
@@ -1022,6 +1102,34 @@ consolidate_mark:false
                 document.getElementById('MT_article').value = data;
 
                 resolve();  // 成功完成时，调用 resolve 以结束 Promise
+            });
+
+        });
+
+    document.getElementById('fetch_online_glossary').addEventListener('click', async function(event) {
+            // 创建并挂载一个临时的 Promise 用于阻塞
+            event.promise = new Promise(async (resolve) => {
+                let glossary = await post('/access_glossary', {
+                    article: document.getElementById('raw_article').value,
+                    group: f_labels['source_lang'] + '-' + f_labels['target_lang'],
+                });
+
+                document.getElementById('glossary').value = glossary;
+                document.getElementById('glossary').dispatchEvent(new Event('change'));
+
+                resolve();  // 成功完成时，调用 resolve 以结束 Promise
+            });
+
+        });
+
+    document.getElementById('update_online_glossary').addEventListener('click', async function(event) {
+            var rows = document.getElementById('glossary').value.split('---|\n')[1].trim().split('\n');
+            rows = rows.map(row => row.split('|').map(word => word.trim()).filter(word => word !== ''));
+            // copy(rows);
+
+            await post('/add_to_online_glossary', {
+                glossary: rows,
+                group: f_labels['source_lang'] + '-' + f_labels['target_lang'],
             });
 
         });
@@ -1051,8 +1159,7 @@ consolidate_mark:false
                     id_group.push('annotation');
                     for (id of id_group) {
                         id = id.trim();
-
-                        await format(document.getElementById(id));
+                        format(document.getElementById(id));
                         eval(`var ${id} = document.getElementById('${id}').value`);
                     }
                 }
@@ -1131,103 +1238,81 @@ consolidate_mark:false
         });
     });
 
-    document.querySelectorAll('.selectVersion').forEach(button => {
-        button.addEventListener('click', async function() {
-            var instruction = document.getElementById(this.getAttribute('article-textarea-id')).value;
-
-            var xml_string = '';
-            for (matched_p of instruction.matchAll(/<(p_\d+)>([^]*?)<\/\1>/g)) {
-                p_i = matched_p[1];
-                p_content = matched_p[2];
-                xml_string += `<${p_i}>\n`;
-                for (matched_s of p_content.matchAll(/(?<=<(s_\d+)>)([^]*?)(?=<\/\1>)/g)) {
-                    s_i = matched_s[1];
-                    s_content = matched_s[2];
-
-                    versions = {}
-                    // /(\s*)\[版本(\d+)\]:\s*([^]*?)(?=\n\1\[版本(\d+)\]|\n\1\[分析\])/g
-                    for (matched_v of s_content.matchAll(new RegExp(`(\\s*)\\[${f_labels["VERSION"]}(\\d+)\\]:\\s*([^]*?)(?=\\n\\1\\[${f_labels["VERSION"]}(\\d+)\\]|\\n\\1\\[${f_labels["ANALYSIS"]}\\])`,'g'))) {
-                        indent = matched_v[1];
-                        v_i = matched_v[2];
-                        v_content = matched_v[3];
-                        versions[v_i] = v_content;
-                    }
-                    // match 方法在没有全局标志 g 的情况下会返回细节信息，包括捕获组；但如果有 g 标志，它只返回所有匹配的数组。
-                    // 匹配 \[选择\]:\s*(\d+)
-                    selected_version = s_content.match(new RegExp(`\\[${f_labels["SELECTION"]}\\]:\\s*(\\d+)`))[1]; 
-
-                    xml_string += versions[selected_version];
-                }
-                xml_string += `\n</${p_i}>\n`;
-            }
-            document.getElementById(this.getAttribute('result-textarea-id')).value = xml_string;
-            document.getElementById(this.getAttribute('result-textarea-id')).dispatchEvent(new Event('change'));
-
+    document.getElementById('extract_polishing_information').addEventListener('click', async function(event) {
+            var info = document.getElementById('polish_preparation').value;
+            document.getElementById('polishing_scheme').value = info.match(/<new_polishing_scheme>([^]*?)<\/new_polishing_scheme>/gs)[0].replaceAll('new_polishing_scheme','polishing_scheme');
+            var annotation = info.match(/<new_annotation>([^]*?)<\/new_annotation>/gs)[0].replaceAll('new_annotation','annotation');
+            document.getElementById('annotation').value = annotation;
+            document.getElementById('wording').value = annotation.match(/<wording>([^]*?)<\/wording>/s)[1];
+            document.getElementById('category').value = annotation.match(/<category>([^]*?)<\/category>/s)[1];
         });
+
+    document.getElementById('selectVersion').addEventListener('click', async function() {
+        var instruction = document.getElementById(this.getAttribute('article-textarea-id')).value;
+
+        var xml_string = '';
+        for (matched_p of instruction.matchAll(/<(p_\d+)>([^]*?)<\/\1>/g)) {
+            p_i = matched_p[1];
+            p_content = matched_p[2];
+            xml_string += `<${p_i}>\n`;
+            for (matched_s of p_content.matchAll(/(?<=<(s_\d+)>)([^]*?)(?=<\/\1>)/g)) {
+                s_i = matched_s[1];
+                s_content = matched_s[2];
+
+                versions = {}
+                // /(\s*)\[版本(\d+)\]:\s*([^]*?)(?=\n\1\[版本(\d+)\]|\n\1\[分析\])/g
+                for (matched_v of s_content.matchAll(new RegExp(`(\\s*)\\[${f_labels["VERSION"]}(\\d+)\\]:\\s*([^]*?)(?=\\n\\1\\[${f_labels["VERSION"]}(\\d+)\\]|\\n\\1\\[${f_labels["ANALYSIS"]}\\])`,'g'))) {
+                    indent = matched_v[1];
+                    v_i = matched_v[2];
+                    v_content = matched_v[3];
+                    versions[v_i] = v_content;
+                }
+                // match 方法在没有全局标志 g 的情况下会返回细节信息，包括捕获组；但如果有 g 标志，它只返回所有匹配的数组。
+                // 匹配 \[选择\]:\s*(\d+)
+                selected_version = s_content.match(new RegExp(`\\[${f_labels["SELECTION"]}\\]:\\s*(\\d+)`))[1]; 
+
+                xml_string += versions[selected_version];
+            }
+            xml_string += `\n</${p_i}>\n`;
+        }
+        document.getElementById(this.getAttribute('result-textarea-id')).value = xml_string;
+        document.getElementById(this.getAttribute('result-textarea-id')).dispatchEvent(new Event('change'));
+
     });
 
-    document.querySelectorAll('.construct_proofed_version').forEach(button => {
-        button.addEventListener('click', async function() {
-            var instruction = document.getElementById(this.getAttribute('article-textarea-id')).value;
 
-            // 找到之前的版本，作为修改基础
-            if (document.getElementById('polished_article').value == '') {
-                var last_version = document.getElementById('polished_article').value;
+    document.getElementById('construct_proofed_version').addEventListener('click', async function() {
+        var instruction = document.getElementById(this.getAttribute('article-textarea-id')).value;
+
+        // 找到之前的版本，作为修改基础
+        if (document.getElementById('polished_article').value == '') {
+            var last_version = document.getElementById('polished_article').value;
+        }
+        else {
+            var last_version = document.getElementById('prerevision_article').value;
+        }
+
+        var xml_string = '';
+        for (matched_p of instruction.matchAll(/<(p_\d+)>([^]*?)<\/\1>/g)) {
+            p_i = matched_p[1];
+            p_content = matched_p[2];
+            xml_string += `<${p_i}>\n`;
+            for (matched_s of p_content.matchAll(/(?<=\[(s_\d+)\]:)([^]*?)(?=\n+\s*\[s_\d+\]:|$)/g)) {
+                s_i = matched_s[1];
+                s_content = matched_s[2];
+
+                // /\[修正\]:\s*([^]*?)$/
+                var revision = s_content.match(new RegExp(`\\[${f_labels["REVISION"]}\\]:\\s*([^]*?)$`))[1]; // match 方法在没有全局标志 g 的情况下会返回细节信息，包括捕获组；但如果有 g 标志，它只返回所有匹配的数组。
+
+                xml_string += revision;
             }
-            else {
-                var last_version = document.getElementById('prerevision_article').value;
-            }
+            xml_string += `</${p_i}>\n`;
+        }
+        document.getElementById(this.getAttribute('result-textarea-id')).value = xml_string;
+        document.getElementById(this.getAttribute('result-textarea-id')).dispatchEvent(new Event('change'));
 
-            var xml_string = '';
-            for (matched_p of instruction.matchAll(/<(p_\d+)>([^]*?)<\/\1>/g)) {
-                p_i = matched_p[1];
-                p_content = matched_p[2];
-                xml_string += `<${p_i}>\n`;
-                for (matched_s of p_content.matchAll(/(?<=\[(s_\d+)\]:)([^]*?)(?=\n+\s*\[s_\d+\]:|$)/g)) {
-                    s_i = matched_s[1];
-                    s_content = matched_s[2];
-
-                    // /\[修正\]:\s*([^]*?)$/
-                    var revision = s_content.match(new RegExp(`\\[${f_labels["REVISION"]}\\]:\\s*([^]*?)$`))[1]; // match 方法在没有全局标志 g 的情况下会返回细节信息，包括捕获组；但如果有 g 标志，它只返回所有匹配的数组。
-
-                    xml_string += revision;
-                }
-                xml_string += `</${p_i}>\n`;
-            }
-            document.getElementById(this.getAttribute('result-textarea-id')).value = xml_string;
-            document.getElementById(this.getAttribute('result-textarea-id')).dispatchEvent(new Event('change'));
-
-        })
     })
 
-
-    document.getElementById('fetch_online_glossary').addEventListener('click', async function(event) {
-            // 创建并挂载一个临时的 Promise 用于阻塞
-            event.promise = new Promise(async (resolve) => {
-                let glossary = await post('/access_glossary', {
-                    article: document.getElementById('raw_article').value,
-                    group: f_labels['source_lang'] + '-' + f_labels['target_lang'],
-                });
-
-                document.getElementById('glossary').value = glossary;
-                document.getElementById('glossary').dispatchEvent(new Event('change'));
-
-                resolve();  // 成功完成时，调用 resolve 以结束 Promise
-            });
-
-        });
-
-    document.getElementById('update_online_glossary').addEventListener('click', async function(event) {
-            var rows = document.getElementById('glossary').value.split('---|\n')[1].trim().split('\n');
-            rows = rows.map(row => row.split('|').map(word => word.trim()).filter(word => word !== ''));
-            // copy(rows);
-
-            await post('/add_to_online_glossary', {
-                glossary: rows,
-                group: f_labels['source_lang'] + '-' + f_labels['target_lang'],
-            });
-
-        });
 
     document.querySelectorAll('.copy_to_comparison').forEach(button => {
         button.addEventListener('click', async function() {

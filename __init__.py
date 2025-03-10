@@ -199,7 +199,7 @@ def LLMchat(user: str, req: LLMRequest):
     pattern = re.compile(r'<(.*?_)(\d+)>(.*?)<\/\1\2>', re.DOTALL)
     prompt_paragraph_last = max([int(idx) for _, idx, text in pattern.findall(prompt)])
     
-    while True:
+    for tried_time in range(5):
         response_cur = llm.invoke(prompt).content
         print('\nresponse_cur:\n', truncate_string(response_cur, 250) + '\n\n...\n...\n\n' + truncate_string(prompt, -250) + '\n')
         
@@ -226,6 +226,8 @@ def LLMchat(user: str, req: LLMRequest):
         else:
             response += response_cur
             break
+    else:
+        return response
 
     # while True:
     #     response_cur = llm.invoke(prompt).content

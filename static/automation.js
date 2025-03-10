@@ -53,34 +53,49 @@ async function auto_stage2() {
         document.getElementById('notification').innerText = 'Step 2.1 failed.'
         throw new Error();
     }
-
+    document.getElementById('notification').innerText = 'Step 2.1 translated...'
     document.getElementById('format_MT_article').click();
     // await sleep(1000);
     document.getElementById('auto_stage2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[0].click();
 
     document.getElementById('MT_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'});
-    document.getElementById('notification').innerText = 'Step 2.1 translated...'
+    document.getElementById('notification').innerText = 'Step 2.2 sending prompt...'
 
     await clickWithAwait(document.getElementById('prerevision_button'));
     if (document.getElementById('prerevision_article').value == '') {
         document.getElementById('notification').innerText = 'Step 2.2 failed.'
         throw new Error();
     }
+
     document.getElementById('auto_stage2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[1].click();
     document.getElementById('prerevision_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
     document.getElementById('notification').innerText = 'STEP2 is done.'
 }
 
 async function auto_stage3() {
-    document.getElementById('notification').innerText = 'STEP 3 is running...'
-    await clickWithAwait(document.getElementById('polish_button1'));
+    document.getElementById('notification').innerText = 'STEP 3 is running...';
+    document.getElementById('notification').innerText = 'Step 3.2 sending prompt...'
+
+    await clickWithAwait(document.getElementById('polish_preparation_button'));
+    if (document.getElementById('polish_preparation').value == '') {
+        document.getElementById('notification').innerText = 'Step 3.2 failed.'
+        throw new Error();
+    }
+    document.getElementById('polish_preparation').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
+
+    document.getElementById('extract_polishing_information').click();
+    await sleep(1000);
+
+    document.getElementById('notification').innerText = 'Step 3.5 sending prompt...'
+
+    await clickWithAwait(document.getElementById('polish_analysis_button'));
     if (document.getElementById('polished_article_analysis').value == '') {
-        document.getElementById('notification').innerText = 'Step 3 failed.'
+        document.getElementById('notification').innerText = 'Step 3.5 failed.'
         throw new Error();
     }
     document.getElementById('polished_article_analysis').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
-    document.getElementById('polish_button2').click();
+    document.getElementById('selectVersion').click();
     await sleep(1000);
 
     document.getElementById('auto_stage3').parentElement.parentElement.querySelector('.copy_to_comparison').click();
@@ -90,14 +105,15 @@ async function auto_stage3() {
 
 async function auto_stage4() {
     document.getElementById('notification').innerText = 'STEP 4 is running...'
+    document.getElementById('notification').innerText = 'Step 4.2 sending prompt...'
     await clickWithAwait(document.getElementById('proof_button1'));
     if (document.getElementById('proofed_article_analysis').value == '') {
-        document.getElementById('notification').innerText = 'Step 4 failed.'
+        document.getElementById('notification').innerText = 'Step 4.2 failed.'
         throw new Error();
     }
     document.getElementById('proofed_article_analysis').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
-    document.getElementById('proof_button2').click();
+    document.getElementById('construct_proofed_version').click();
     await sleep(1000);
 
     document.getElementById('auto_stage4').parentElement.parentElement.querySelector('.copy_to_comparison').click();
