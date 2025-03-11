@@ -17,7 +17,7 @@
 <svg  id="goto-next" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#FFF" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
 
 <input type="file" id="load_input" textarea-id="">
-<span id="notification" class="advanced_mode">Show the automated processes (click to stop them while running)</span>
+<span id="notification" class="advanced_mode">The automation process will be displayed here (click to stop the automation)</span>
 
 <div class="modal fade" id="help1_Modal" tabindex="-1" aria-labelledby="help1_ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -118,7 +118,8 @@
     </div>
     <div class="slide" id="slide1">
         <h2>(Get the key information that helps the translation)
-            <button type="button" id="auto_stage1" class="d-none automation advanced_mode btn btn-success btn-sm btn-sm">Automatically execute the entire Step</button>
+            <button type="button" id="auto_stage1" class="automation advanced_mode btn btn-success btn-sm btn-sm">Automatically execute the entire Stage</button>
+            <!-- d-none -->
         </h2>
         <div class="flex-container">
             <div class="grid advanced_mode">
@@ -128,7 +129,7 @@
                 <textarea id="glossary" rows="10" cols="50" placeholder="Example:&#10;&#10;| Term | Category | Translation |&#10;|---|---|---|&#10;| LLM | AI | 大语言模型 |"></textarea>
                 
                 <button id="update_online_glossary" textarea-id="glossary">
-                Update the new glossary to the online database</button>
+                Click here to update the online database after modification</button>
             </div>
             <div class="grid">
                 <h4 class="text-danger">1.2 Please click on the red button to generate a prompt from the template and previous content
@@ -139,7 +140,7 @@
             </div>
 
             <div class="grid">
-                <h4 class="text-danger">1.3 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <h4 class="text-danger">1.3 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                 <br>
                 <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">1.4 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                 <label for="annotation">Annotation: </label>
@@ -160,16 +161,13 @@
         </div>
     </div>
     <div class="slide" id="slide2">
-        <h2>(Preliminary translation)
-            <button type="button" id="auto_stage1" class="d-none automation advanced_mode btn btn-success btn-sm btn-sm">Automatically execute the entire Step</button>
-        </h2>
-        <h2>
-            <button type="button" id="auto_stage2" class="d-none automation advanced_mode btn btn-success btn-sm">Automatically execute the entire Step</button>
+        <h2>(Preliminary translation and simple polishing & proofreading)
+            <button type="button" id="auto_stage2" class="automation advanced_mode btn btn-success btn-sm btn-sm">Automatically execute the entire Stage</button>
         </h2>
         <div class="flex-container">
             <div class="advanced_mode">
                 <div class="grid">
-                    <h4 class="text-danger">2.1 Machine translation
+                    <h4 class="text-danger">2.1 Use machine translation to generate first draft
                         <button type="button" class="btn btn-danger" id="machine_translate">Translate by DeepL</button></h4>
                     
                     <textarea id="MT_article" xml-label="p_?" rows="10" cols="50"></textarea>
@@ -191,7 +189,6 @@
                     <br>
                 </div>
 
-                <h4 class="text-danger">Simple revision (simple polishing & proofreading)</h4>
                 <div class="grid">
                     <h4 class="text-danger">2.2.1 Please click on the red button to generate a prompt from the template and previous content
                         <button type="button" class="process_prompt_general btn btn-danger" prompt-textarea-id="prerevision_prompt" article-textarea-id="MT_article">Generate prompt and copy it</button></h4>
@@ -200,7 +197,7 @@
                     <textarea id="prerevision_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>  
                 </div>
                 <div class="grid">
-                    <h4 class="text-danger">2.2.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                    <h4 class="text-danger">2.2.2 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                     <br>
                     <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">2.2.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                     <label for="prerevision_article">Simple revision:</label>
@@ -215,7 +212,7 @@
                     <textarea id="LLM_translation_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>           
                 </div>
                 <div class="grid">
-                    <h4 class="text-danger">2.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                    <h4 class="text-danger">2.2 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                     <br>
                     <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">2.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                     <label for="prerevision_article">Preliminary Translated:</label>
@@ -241,8 +238,8 @@
         </div>
     </div>
     <div class="slide" id="slide3">
-        <h2>(Get different polish verisons and then integrating them)
-            <button type="button" id="auto_stage3" class="d-none automation advanced_mode btn btn-success btn-sm">Automatically execute the entire Step</button>
+        <h2>(Generate the new polish scheme)
+            <button type="button" id="auto_stage3" class="automation advanced_mode btn btn-success btn-sm">Automatically execute the entire Stage</button>
         </h2>
         <div class="flex-container">
             <div class="grid">
@@ -253,13 +250,17 @@
                 <textarea id="polish_preparation_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>
             </div>
             <div class="grid">
-                <h4 class="text-danger">3.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <h4 class="text-danger">3.2 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                 <br>
                 <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">3.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                 <textarea id="polish_preparation" rows="10" cols="50"></textarea>
                 <h4 class="text-danger">3.4 Extract the information from the responsed text above
                 <button type="button" id="extract_polishing_information" class="btn btn-danger">Extract</button></h4> 
             </div>
+        </div>
+        <h2>(Get different polish verisons and then integrating them)</button>
+        </h2>
+        <div class="flex-container">    
             <div class="grid">
                 <h4 class="text-danger">3.5 Please click on the red button to generate a prompt from the template and previous content
                     <button type="button" class="process_prompt_general btn btn-danger" prompt-textarea-id="polish_prompt" article-textarea-id="prerevision_article|MT_article">Generate prompt and copy it</button></h4>
@@ -268,7 +269,7 @@
                 <textarea id="polish_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>
             </div>
             <div class="grid">
-                <h4 class="text-danger">3.6 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <h4 class="text-danger">3.6 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                     <br>
                 <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">3.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                 <textarea id="polished_article_analysis" rows="10" cols="50"></textarea>
@@ -298,7 +299,7 @@
     </div>
     <div class="slide" id="slide4">
         <h2>(Analyze translation errors in each sentence and correct them)
-            <button type="button" id="auto_stage4" class="d-none automation advanced_mode btn btn-success btn-sm">Automatically execute the entire Step</button>
+            <button type="button" id="auto_stage4" class="automation advanced_mode btn btn-success btn-sm">Automatically execute the entire Stage</button>
         </h2>
         <div class="flex-container">
             <div class="grid">
@@ -309,7 +310,7 @@
                 <textarea id="proof_prompt" rows="3" cols="50" style="background-color: #FFFBE6"></textarea>
             </div>
             <div class="grid">
-                <h4 class="text-danger">4.2 Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt</h4>
+                <h4 class="text-danger">4.2 Please start a new chatbot (e.g. ChatGPT), then send the copied prompt</h4>
                     <br>
                 <h4 class="text-danger" data-bs-toggle="modal" data-bs-target="#help2_Modal">4.3 When the response of chatbot is ready, copy the response and paste it below&#10;&#10;<span class="badge rounded-pill text-bg-primary">Help</span></h4>
                 <textarea id="proofed_article_analysis" rows="10" cols="50"></textarea>
@@ -374,15 +375,18 @@ const replacements = {
     "(English->Chinese)": "(此版本为英文译中文)",
     "for ease of processing, there should be at least one blank line between paragraphs": "为了便于处理，不同段落之间应有至少一个空行",
     "Get the key information that helps the translation": "获取有助于翻译的重要信息",
-    "Show the automated processes (click to stop them while running)": "显示自动化进度（运行中点击可停止运行）",
+    "The automation process will be displayed here (click to stop the automation)": "此处可显示自动化进度（点击可停止自动化）",
 
+    "Use machine translation to generate first draft": "使用机器翻译生成初稿",
+    "Preliminary translation and simple polishing & proofreading": "初步翻译和简单的润色&校对",
     "Preliminary translation": "初步翻译",
-    "Simple revision (simple polishing & proofreading)": "初步修改（简单的校对&润色）",
+    "Generate the new polish scheme": "生成新的润色方案",
     "Get different polish verisons and then integrating them": "获得不同的润色，然后整合",
     "Analyze translation errors in each sentence and correct them": "分析每句话的翻译错误并修改",
 
     "This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App and cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App to process.": "本应用需与聊天助手（如 ChatGPT）进行问答。在手动模式下，本应用无法直接连接聊天助手，你需要手动将应用生成的 Prompt 发送给聊天助手，并将其回复传回应用处理。",
-    "Enter the original text and click here to automate the entire translation process": "输入原文后点此自动完成所有流程",
+    "Enter the original text and click here to automate the entire translation process": "输入原文后点此自动运行所有流程",
+    "Automatically execute the entire Stage": "自动运行这部分的流程",
     "Enter the original text": "输入原文",
     "Click the right arrow to start the next Stage": "点击右侧箭头进入下一阶段",
     "Read the instruction in red for each step and follow the instructions": "阅读每个步骤的红色文字，按照文字指示操作",
@@ -397,7 +401,7 @@ const replacements = {
     "Prompt template": "Prompt模板",
     "Summarize the key information": "总结重要信息",
     "Please click on the red button to generate a prompt from the template and previous content": "请点击红色按钮，根据模板和之前的内容生成Prompt",
-    "Please start a new chatbot (e.g. ChatGPT), then paste and send the prompt": "请重新打开一个聊天助手页面（比如ChatGPT），然后粘贴并发送刚刚的Prompt",
+    "Please start a new chatbot (e.g. ChatGPT), then send the copied prompt": "请重新打开一个聊天助手页面（如ChatGPT），然后发送复制的Prompt",
     "Generate prompt and copy it": "生成并复制Prompt",
     "Auto-generate/execute the prompt and send the response to the next textarea": "自动生成 / 执行prompt并把回复填入后面的文本框",
 
@@ -416,7 +420,7 @@ const replacements = {
     "Create a glossary": "创建词汇表",
     "Reference Glossary:": "参考词汇表:",
     "Generate a glossary from the online database": "检索在线数据库，自动生成词汇表",
-    "Update the new glossary to the online database": "用当前词汇表更新在线数据库",
+    "Click here to update the online database after modification": "修改后点此更新在线数据库",
     "Translate by DeepL": "使用DeepL翻译",
 
     "Extract": "提取",
