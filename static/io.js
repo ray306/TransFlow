@@ -139,6 +139,8 @@ function sound_alarm() {
     }, 300);
 }
 
+var controller = new AbortController();
+
 async function post(url, body) {
     try {
         const response = await fetch(`${window.location.origin}${window.location.pathname}${url}`, {
@@ -148,7 +150,8 @@ async function post(url, body) {
                 'Access-Control-Allow-Origin': '*', // 注意：实际部署时这可能引起安全问题
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            signal: controller.signal,
         });
 
         if (!response.ok) {
@@ -162,6 +165,13 @@ async function post(url, body) {
         return ''; // 在错误发生时返回 null 或其他错误处理逻辑
     }
 }
+
+// 点击按钮时取消请求
+document.getElementById('notification').addEventListener('click', () => {
+    controller.abort();
+    controller = new AbortController();
+    console.log('Fetch cancelled.');
+});
 
 async function send2LLM(prompt, completion_mark, new_chat, close) {
     var data = await post('/LLMchat', 

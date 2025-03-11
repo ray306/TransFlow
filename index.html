@@ -17,7 +17,7 @@
 <svg  id="goto-next" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#FFF" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>
 
 <input type="file" id="load_input" textarea-id="">
-<span id="notification"></span>
+<span id="notification" class="advanced_mode">Show the automated processes (click to stop them while running)</span>
 
 <div class="modal fade" id="help1_Modal" tabindex="-1" aria-labelledby="help1_ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -89,7 +89,7 @@
                     <span>
                         <h5>You have two options for the operation: </h5>
                         <h5 data-bs-toggle="modal" data-bs-target="#help1_Modal">- Manual:&#10;&#10;<span class="badge rounded-pill text-bg-primary">Explanation</span></h5>
-                        <h5>- Automatic: Available only in ADVANCED mode<button type="button" id="switch_mode" class="btn btn-warning">Switch to ADVANCED mode</button><button type="button" id="auto_stage_all" class="automation advanced_mode btn btn-success">Enter the original text and click here to automate the entire translation process</button></h5>
+                        <h5>- Automatic: Available only in ADVANCED mode (will consumes credits)<button type="button" id="switch_mode" class="btn btn-warning">Switch to ADVANCED mode</button><button type="button" id="auto_stage_all" class="automation advanced_mode btn btn-success">Enter the original text and click here to automate the entire translation process</button></h5>
                         
                         <span class="advanced_mode">Prompt Length Limit:<input type="text" id="length_limit" size="8" value="32000"></span>
                     </span>
@@ -374,6 +374,7 @@ const replacements = {
     "(English->Chinese)": "(此版本为英文译中文)",
     "for ease of processing, there should be at least one blank line between paragraphs": "为了便于处理，不同段落之间应有至少一个空行",
     "Get the key information that helps the translation": "获取有助于翻译的重要信息",
+    "Show the automated processes (click to stop them while running)": "显示自动化进度（运行中点击可停止运行）",
 
     "Preliminary translation": "初步翻译",
     "Simple revision (simple polishing & proofreading)": "初步修改（简单的校对&润色）",
@@ -419,7 +420,7 @@ const replacements = {
     "Translate by DeepL": "使用DeepL翻译",
 
     "Extract": "提取",
-    "Available only in ADVANCED mode": "仅在高级模式下可用",
+    "Available only in ADVANCED mode (will consumes credits)": "仅在高级模式下可用（会消耗额度）",
     "Switch to BASIC mode": "切换到简单模式",
     "Switch to ADVANCED mode": "切换到高级模式",
 
