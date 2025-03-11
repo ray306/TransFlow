@@ -191,17 +191,21 @@ def LLMchat(user: str, req: LLMRequest):
     llm = get_model(user, model='llm')
 
     prompt = req.prompt
-    print('\nsending prompt:\n', truncate_string(prompt, 250) + '\n\n...\n...\n\n' + truncate_string(prompt, -250) + '\n')
+    prompt_cur = prompt
+    
     # 发送消息到 ChatGPT
     response = ''
     finished_check = lambda x, response: x in response if x!='' else True
 
-    pattern = re.compile(r'<(.*?_)(\d+)>(.*?)<\/\1\2>', re.DOTALL)
-    prompt_paragraph_last = max([int(idx) for _, idx, text in pattern.findall(prompt)])
+    pattern = re.compile(r'<p_(\d+)>(.*?)<\/p_\1>', re.DOTALL)
+    prompt_paragraph_last = max([int(idx) for idx, text in pattern.findall(prompt)])
     
-    for tried_time in range(5):
-        response_cur = llm.invoke([("system",prompt),("human", ""),]).content
-        print('\nresponse_cur:\n', truncate_string(response_cur, 250) + '\n\n...\n...\n\n' + truncate_string(prompt, -250) + '\n')
+    for tried_time in range(10):
+        print('\nsending prompt:\n', truncate_string(prompt, 500) + '\n\n...\n...\n\n' + truncate_string(prompt, -500) + '\n')
+        response_cur = llm.invoke([("system", prompt_cur),("human", ""),]).content
+        
+        # print('\nresponse_cur:\n', truncate_string(response_cur, 250) + '\n\n...\n...\n\n' + truncate_string(prompt, -250) + '\n')
+        print('\nresponse_cur:\n', response_cur)
         
         if len(pattern.findall(response_cur)) > 0:
             response += response_cur
@@ -212,17 +216,26 @@ def LLMchat(user: str, req: LLMRequest):
             #     response += ''.join([f'<p_{idx}>{text}</p_{idx}>\n' for _, idx, text in pattern.findall(response_cur)])
 
             if finished_check(req.completion_mark, response):
+                print('Finished.')
+                break
+            if len(list(pattern.findall(response_cur)))==0:
+                print('The task did not finished. Something is wrong.')
                 break
             else:
-                output_paragraph_last = max([int(idx) for _, idx, text in pattern.findall(response_cur)])
-                n = output_paragraph_last + 1
-                prompt = re.sub(r"(```)([\s\S]*)(```)", 
-                            lambda m: m.group(1) + re.sub(r"<p_1>", f"<p_{n}>", 
-                                            re.sub(r"</p_1>", f"</p_{n}>", 
-                                            re.sub(r"<p_2>", f"<p_{n+1}>", 
-                                            re.sub(r"</p_2>", f"</p_{n+1}>", m.group(2))))), 
-                            prompt)
-                prompt = re.sub(r"`<p_1>`", f"`<p_{n+1}>`", prompt)
+                p_last = max([int(idx) for idx, text in pattern.findall(response_cur)])
+
+                # 去除已有的部分
+                prompt_cur = re.sub(re.compile(rf'<p_1>(.*?)<\/p_{p_last}>', re.DOTALL), f"", prompt)
+
+                prompt_cur = re.sub(r"(```)([\s\S]*)(```)", 
+                            lambda m: m.group(1) + re.sub(r"<p_1>", f"<p_{p_last+1}>", 
+                                            re.sub(r"</p_1>", f"</p_{p_last+1}>", 
+                                            re.sub(r"<p_2>", f"<p_{p_last+2}>", 
+                                            re.sub(r"</p_2>", f"</p_{p_last+2}>", m.group(2))))), 
+                            prompt_cur)
+                prompt_cur = re.sub(r"`<p_1>`", f"`<p_{p_last+1}>`", prompt_cur)
+                print('The task did not finished. Retry to complete it.')
+
         else:
             response += response_cur
             break
@@ -331,91 +344,121 @@ def add_to_online_glossary(user: str, req: GlossaryUpdateRequest):
     for g in batch_list(new_glossary, 10):
         table.batch_create(g)
 
-class ArticleRequest(BaseModel):
-    texts: List[str]
-    languages: List[str]
-    names: List[str]
-    sentence_segment: bool
+# class ArticleRequest(BaseModel):
+#     texts: List[str]
+#     languages: List[str]
+#     names: List[str]
+#     sentence_segment: bool
 
-@app.api_route('/{user}/combine_articles', methods=['POST'])
-def combine_articles(user: str, req: ArticleRequest):
-    texts = req.texts
-    languages = req.languages
-    if len(languages) == 1:
-        languages = [languages[0] for i in range(len(texts))]
-    names = req.names
-    if len(names) == 1:
-        names = [names[0] for i in range(len(texts))]
+# def merge_short_elements(lst):
+#     i = 0
+#     while i < len(lst):
+#         if len(lst[i]) <= 1:
+#             if i == 0:
+#                 # 只能合并到右边
+#                 lst[i + 1] = lst[i] + lst[i + 1]
+#                 del lst[i]
+#             elif i == len(lst) - 1:
+#                 # 只能合并到左边
+#                 lst[i - 1] += lst[i]
+#                 del lst[i]
+#                 i -= 1  # 回退索引，避免跳过元素
+#             else:
+#                 # 选择合并到较短的那个
+#                 if len(lst[i - 1]) <= len(lst[i + 1]):
+#                     lst[i - 1] += lst[i]
+#                     del lst[i]
+#                     i -= 1  # 回退索引，避免跳过元素
+#                 else:
+#                     lst[i + 1] = lst[i] + lst[i + 1]
+#                     del lst[i]
+#         else:
+#             i += 1
+#     return lst
 
-    # print(texts)
+# from sentencex import segment
+# @app.api_route('/{user}/combine_articles', methods=['POST'])
+# def combine_articles(user: str, req: ArticleRequest):
+#     texts = req.texts
+#     languages = req.languages
+#     if len(languages) == 1:
+#         languages = [languages[0] for i in range(len(texts))]
+#     names = req.names
+#     if len(names) == 1:
+#         names = [names[0] for i in range(len(texts))]
 
-    new_texts = dict()
-    # find all matches to groups
-    pg_pattern = re.compile(r"<p_(\d+)>\n{0,}([\s\S]*?)\n{0,}<\/p_\d+>")
-    for text, language in zip(texts, languages):
-        for pg in pg_pattern.finditer(text):
+#     # print(texts)
+
+#     new_texts = dict()
+#     # find all matches to groups
+#     pg_pattern = re.compile(r"<p_(\d+)>\n{0,}([\s\S]*?)\n{0,}<\/p_\d+>")
+#     for text, language in zip(texts, languages):
+#         for pg in pg_pattern.finditer(text):
             
-            pg_idx, content = int(pg.group(1)), pg.group(2).strip()
-            if pg_idx not in new_texts:
-                new_texts[pg_idx] = []
+#             pg_idx, content = int(pg.group(1)), pg.group(2).strip()
+#             if pg_idx not in new_texts:
+#                 new_texts[pg_idx] = []
             
-            if '<s_1>' in content:
-                matches = re.findall(r'<(s_\d+)>(.*?)</\1>', content, flags=re.DOTALL)
-                content = [sent for tag, sent, *_ in matches]
-            elif req.sentence_segment:
-                language = language.lower()
-                if language in ['chinese', 'japanese']:
-                    # Regular expression to match sentence-ending punctuation
-                    pattern = re.compile(r'(?<=[。！？])')
-                    # Split text using the pattern
-                    sentences = pattern.split(content)
-                    # Remove any empty strings from the result
-                    content = [sentence.strip() for sentence in sentences if sentence.strip()]
-                else:
-                    content = nltk.sent_tokenize(content, language=language)
+#             if '<s_1>' in content:
+#                 matches = re.findall(r'<(s_\d+)>(.*?)</\1>', content, flags=re.DOTALL)
+#                 content = [sent for tag, sent, *_ in matches]
+#             elif req.sentence_segment:
+#                 language = language.lower()
+#                 content = list(segment(language, content))
+#                 content = merge_short_elements(content)
 
-            new_texts[pg_idx].append(content)
+#                 # if language in ['chinese', 'japanese']:
+#                 #     # Regular expression to match sentence-ending punctuation
+#                 #     pattern = re.compile(r'(?<=[。！？])')
+#                 #     # Split text using the pattern
+#                 #     sentences = pattern.split(content)
+#                 #     # Remove any empty strings from the result
+#                 #     content = [sentence.strip() for sentence in sentences if sentence.strip()]
+#                 # else:
+#                 #     content = nltk.sent_tokenize(content, language=language)
 
-    version_number = len(names)
-    xml = '<article>\n'
-    for pg_idx, versions in new_texts.items():
-        xml += f"<p_{pg_idx}>\n"
+#             new_texts[pg_idx].append(content)
 
-        if req.sentence_segment:
-            # Check if the number of sentences is the same in all versions
-            num_sentences = len(versions[0])
-            if not all(len(version) == num_sentences for version in versions):
-                # combine the sentences in each version
-                versions = [[' '.join(version)] for version in versions]
-                num_sentences = 1
+#     version_number = len(names)
+#     xml = '<article>\n'
+#     for pg_idx, versions in new_texts.items():
+#         xml += f"<p_{pg_idx}>\n"
+
+#         if req.sentence_segment:
+#             # Check if the number of sentences is the same in all versions
+#             num_sentences = len(versions[0])
+#             if not all(len(version) == num_sentences for version in versions):
+#                 # combine the sentences in each version
+#                 versions = [[' '.join(version)] for version in versions]
+#                 num_sentences = 1
             
-            for sent_idx in range(num_sentences):
-                xml += f"\t[s_{sent_idx+1}]:\n"
+#             for sent_idx in range(num_sentences):
+#                 xml += f"\t[s_{sent_idx+1}]:\n"
 
-                versions_ = [version[sent_idx] for version in versions]
-                names_ = names
-                if len(names_[0]) > 0:
-                    if len(set(names)) == 1:
-                        versions_ = set(versions_)
-                        names_ = [f'{names[0]}_{i+1}' for i in range(len(versions_))]
-                    for v_name, v_sent in zip(names_, versions_):
-                        xml += f"\t\t[{v_name}]: {v_sent}\n"
-                else:
-                    for v_sent in versions_:
-                        xml += f"\t\t{v_sent}\n"
-        else:
-            names_ = names
-            if len(names_[0]) > 0:
-                for v_name, v_pg in zip(names_, versions):
-                    xml += f"\t[{v_name}]: {v_pg}\n"
-            else:
-                for v_sent in versions:
-                    xml += f"\t\t{v_sent}\n"
+#                 versions_ = [version[sent_idx] for version in versions]
+#                 names_ = names
+#                 if len(names_[0]) > 0:
+#                     if len(set(names)) == 1:
+#                         versions_ = set(versions_)
+#                         names_ = [f'{names[0]}_{i+1}' for i in range(len(versions_))]
+#                     for v_name, v_sent in zip(names_, versions_):
+#                         xml += f"\t\t[{v_name}]: {v_sent}\n"
+#                 else:
+#                     for v_sent in versions_:
+#                         xml += f"\t\t{v_sent}\n"
+#         else:
+#             names_ = names
+#             if len(names_[0]) > 0:
+#                 for v_name, v_pg in zip(names_, versions):
+#                     xml += f"\t[{v_name}]: {v_pg}\n"
+#             else:
+#                 for v_sent in versions:
+#                     xml += f"\t\t{v_sent}\n"
 
-        xml += f"</p_{pg_idx}>\n"
-    xml += '</article>'
+#         xml += f"</p_{pg_idx}>\n"
+#     xml += '</article>'
 
-    return xml
+#     return xml
 
 
 if __name__ == "__main__":

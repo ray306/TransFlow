@@ -24,7 +24,7 @@
     <div class="modal-content">
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       <div class="modal-body">
-        <h6>This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App.</h6>
+        <h6>This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App and cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App.</h6>
         <hr>
         <h4>Steps:</h4>
         <p>1. Enter the original text.</p>
@@ -353,6 +353,19 @@
 <script type="text/javascript" src="static/shorten-prompt.js"></script>
 <script type="text/javascript" src="static/slides.js"></script>
 <script type="text/javascript" src="static/automation.js"></script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "sentencex": "https://esm.sh/sentencex@0.4.2"
+    }
+  }
+</script>
+<script type="module">
+  import segment from "sentencex"; // → https://esm.sh/react@18.2.0
+  window.segment = segment;
+</script>
+
 <script type="text/javascript">
 
 // 替换字典
@@ -367,7 +380,7 @@ const replacements = {
     "Get different polish verisons and then integrating them": "获得不同的润色，然后整合",
     "Analyze translation errors in each sentence and correct them": "分析每句话的翻译错误并修改",
 
-    "This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App.": "本应用需与聊天助手（如 ChatGPT）进行问答。在手动模式下，应用无法直接连接聊天助手，你需要手动将应用生成的 Prompt 发送给聊天助手，并将其回复传回应用。",
+    "This App interacts with a chatbot (e.g., ChatGPT) for Q&A. In manual mode, the App and cannot directly connect to the chatbot. You will need to manually send the generated prompt to the chatbot and copy its response back into the App to process.": "本应用需与聊天助手（如 ChatGPT）进行问答。在手动模式下，本应用无法直接连接聊天助手，你需要手动将应用生成的 Prompt 发送给聊天助手，并将其回复传回应用处理。",
     "Enter the original text and click here to automate the entire translation process": "输入原文后点此自动完成所有流程",
     "Enter the original text": "输入原文",
     "Click the right arrow to start the next Stage": "点击右侧箭头进入下一阶段",
@@ -936,14 +949,14 @@ ${general_note}
         [${f_labels["VERSION"]}1]: ## Lorem
         [${f_labels["VERSION"]}2]: ## Lorem
         [${f_labels["VERSION"]}3]: ## Lorem ipsum
-        [${f_labels["ANALYSIS"]}]: xxx
+        [${f_labels["ANALYSIS"]}]: cillum dolore eu fugiat nulla pariatur...
         [${f_labels["SELECTION"]}]: 1
     </s_1>
     <s_2>
         [${f_labels["VERSION"]}1]: Lorem ipsum **dolor** sit amet, consectetur elit
         [${f_labels["VERSION"]}2]: Lorem ipsum **dolor**, consectetur elit
         [${f_labels["VERSION"]}3]: Lorem ipsum **dolor** sit amet, consectetur adipiscing elit
-        [${f_labels["ANALYSIS"]}]: xxx
+        [${f_labels["ANALYSIS"]}]: sunt in culpa qui officia deserunt...
         [${f_labels["SELECTION"]}]: 3
     </s_2>
     ...
@@ -1169,7 +1182,7 @@ consolidate_mark:false
                 let formatted_article = '';
                 if (article_format) {
                     article_format = article_format[0].slice(2,-2);
-                    formatted_article = await post('/combine_articles', eval('({'+article_format+'})'));
+                    formatted_article = combine_articles(...Object.values(eval('({'+article_format+'})')));
 
                     matches = formatted_article.match(/<\/p_.*?>/g);
                     last_paragraph = matches[matches.length - 1];
@@ -1379,7 +1392,7 @@ consolidate_mark:false
 
         document.querySelector(`button[textarea-id="article_version_${idx}"].format_article`).addEventListener('click', async function() {
                 var textareaId = this.getAttribute('textarea-id');
-                await format(document.getElementById(textareaId));
+                format(document.getElementById(textareaId));
             });
 
         document.querySelectorAll('.load-Button').forEach(button => {
@@ -1404,7 +1417,7 @@ consolidate_mark:false
         for (ele of nodes) {
             if (ele.className == 'grid version') {
                 var article_ele = ele.getElementsByTagName('textarea')[0];
-                var article_xml = await format(article_ele);
+                var article_xml = format(article_ele);
 
                 var version_name = ele.getElementsByTagName('input')[0].value;
                 version_names.push(version_name);

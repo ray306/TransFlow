@@ -130,7 +130,7 @@ function xmlReformat(xml, operations) {
     return xmlString;
 }
 
-async function format(textarea) {
+function format(textarea) {
     var article = textarea.value.trim();
 
     if (textarea.getAttribute('operations')) {
@@ -314,3 +314,141 @@ document.querySelectorAll('.format_article').forEach(button => {
 //     xml_string = standardize_indentation(xml_string) # 去除某些过度的缩进
 //     xml_string = xml_string.replace('྾', '\n') # 把dict_to_xml这一步引进的替代换行符改回来
 //     return xml_string
+
+function merge_short_elements(lst) {
+  let i = 0;
+  while (i < lst.length) {
+    if (lst[i].length <= 1) {
+      if (i === 0) {
+        // 只能合并到右边
+        lst[i + 1] = lst[i] + lst[i + 1];
+        lst.splice(i, 1);
+      } else if (i === lst.length - 1) {
+        // 只能合并到左边
+        lst[i - 1] = lst[i - 1] + lst[i];
+        lst.splice(i, 1);
+        i--; // 回退索引，避免跳过元素
+      } else {
+        // 选择合并到较短的那个
+        if (lst[i - 1].length <= lst[i + 1].length) {
+          lst[i - 1] = lst[i - 1] + lst[i];
+          lst.splice(i, 1);
+          i--; // 回退索引，避免跳过元素
+        } else {
+          lst[i + 1] = lst[i] + lst[i + 1];
+          lst.splice(i, 1);
+        }
+      }
+    } else {
+      i++;
+    }
+  }
+  return lst;
+}
+
+function combine_articles(texts, languages, names, sentenceSegment) {
+  // 当languages或者names只有一个元素时复制扩展到texts的长度
+  if (languages.length === 1) {
+    languages = new Array(texts.length).fill(languages[0]);
+  }
+  if (names.length === 1) {
+    names = new Array(texts.length).fill(names[0]);
+  }
+
+  let newTexts = {};
+  // 正则表达式匹配 <p_数字>...</p_数字>
+  const pgPattern = /<p_(\d+)>\s*([\s\S]*?)\s*<\/p_\d+>/g;
+
+  texts.forEach((text, idx) => {
+    let language = languages[idx];
+    // 使用 matchAll 遍历所有匹配结果
+    for (const pg of text.matchAll(pgPattern)) {
+      const pgIdx = parseInt(pg[1], 10);
+      let content = pg[2].trim();
+      if (!newTexts[pgIdx]) {
+        newTexts[pgIdx] = [];
+      }
+
+      if (content.includes('<s_1>')) {
+        // 正则匹配句子部分： <s_数字>...</s_数字>
+        const sentenceRegex = /<(s_\d+)>(.*?)<\/\1>/gs;
+        let matches = [];
+        for (const m of content.matchAll(sentenceRegex)) {
+          // m[1] 是标签，m[2] 是句子内容
+          matches.push(m[2]);
+        }
+        content = matches;
+      } else if (sentenceSegment) {
+        // 假定存在 segment(language, content) 函数用于句子分割
+        language = language.toLowerCase();
+        content = segment(language, content);
+        content = merge_short_elements(content);
+      }
+      newTexts[pgIdx].push(content);
+    }
+  });
+
+  // versionNumber 在此处没被用到，仅记录版本数
+  const versionNumber = names.length;
+  let xml = '<article>\n';
+
+  // 遍历每个段落，按照 pg_idx 的数字顺序排序
+  Object.keys(newTexts)
+    .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+    .forEach(pgIdx => {
+      const versions = newTexts[pgIdx];
+      xml += `<p_${pgIdx}>\n`;
+
+      if (sentenceSegment) {
+        let numSentences = versions[0].length;
+        // 检查所有版本的句子数量是否一致
+        if (!versions.every(version => version.length === numSentences)) {
+          // 将每个版本所有句子合并成一个句子
+          for (let i = 0; i < versions.length; i++) {
+            versions[i] = [versions[i].join(' ')];
+          }
+          numSentences = 1;
+        }
+
+        for (let sentIdx = 0; sentIdx < numSentences; sentIdx++) {
+          xml += `\t[s_${sentIdx + 1}]:\n`;
+
+          let versions_ = versions.map(version => version[sentIdx]);
+          let names_ = names.slice();
+          if (names_[0].length > 0) {
+            if (new Set(names).size === 1) {
+              // 如果所有版本的名称相同，则使用新的名称格式
+              versions_ = Array.from(new Set(versions_));
+              names_ = [];
+              for (let i = 0; i < versions_.length; i++) {
+                names_.push(`${names[0]}_${i + 1}`);
+              }
+            }
+            for (let i = 0; i < Math.min(names_.length, versions_.length); i++) {
+              xml += `\t\t[${names_[i]}]: ${versions_[i]}\n`;
+            }
+          } else {
+            versions_.forEach(v_sent => {
+              xml += `\t\t${v_sent}\n`;
+            });
+          }
+        }
+      } else {
+        let names_ = names.slice();
+        if (names_[0].length > 0) {
+          for (let i = 0; i < Math.min(names_.length, versions.length); i++) {
+            xml += `\t[${names_[i]}]: ${versions[i]}\n`;
+          }
+        } else {
+          versions.forEach(v_sent => {
+            xml += `\t\t${v_sent}\n`;
+          });
+        }
+      }
+
+      xml += `</p_${pgIdx}>\n`;
+    });
+  xml += '</article>';
+
+  return xml;
+}

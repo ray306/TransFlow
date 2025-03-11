@@ -39,7 +39,7 @@ async function auto_stage1() {
     document.getElementById('annotation').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
     document.getElementById('format_annotation').click();
-    // await sleep(1000);
+    await sleep(500);
 
     document.getElementById('notification').innerText = 'Step 1.4 annotation formatted'
 }
@@ -55,7 +55,7 @@ async function auto_stage2() {
     }
     document.getElementById('notification').innerText = 'Step 2.1 translated...'
     document.getElementById('format_MT_article').click();
-    // await sleep(1000);
+    await sleep(500);
     document.getElementById('auto_stage2').parentElement.parentElement.querySelectorAll('.copy_to_comparison')[0].click();
 
     document.getElementById('MT_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'});
@@ -84,7 +84,7 @@ async function auto_stage3() {
     document.getElementById('polish_preparation').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
     document.getElementById('extract_polishing_information').click();
-    await sleep(1000);
+    await sleep(500);
 
     document.getElementById('notification').innerText = 'Step 3.5 sending prompt...'
 
@@ -96,7 +96,7 @@ async function auto_stage3() {
     document.getElementById('polished_article_analysis').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
     document.getElementById('selectVersion').click();
-    await sleep(1000);
+    await sleep(500);
 
     document.getElementById('auto_stage3').parentElement.parentElement.querySelector('.copy_to_comparison').click();
     document.getElementById('polished_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
@@ -114,7 +114,7 @@ async function auto_stage4() {
     document.getElementById('proofed_article_analysis').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
 
     document.getElementById('construct_proofed_version').click();
-    await sleep(1000);
+    await sleep(500);
 
     document.getElementById('auto_stage4').parentElement.parentElement.querySelector('.copy_to_comparison').click();
     document.getElementById('proofed_article').parentElement.scrollIntoView({ behavior: 'smooth',inline: 'start'}); 
