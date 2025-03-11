@@ -200,7 +200,7 @@ def LLMchat(user: str, req: LLMRequest):
     prompt_paragraph_last = max([int(idx) for _, idx, text in pattern.findall(prompt)])
     
     for tried_time in range(5):
-        response_cur = llm.invoke(prompt).content
+        response_cur = llm.invoke([("system",prompt),("human", ""),]).content
         print('\nresponse_cur:\n', truncate_string(response_cur, 250) + '\n\n...\n...\n\n' + truncate_string(prompt, -250) + '\n')
         
         if len(pattern.findall(response_cur)) > 0:
