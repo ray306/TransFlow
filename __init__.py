@@ -26,7 +26,7 @@ with open(config_path, "a+") as f:
     if llm_api_key2 is None:
         llm_api_key2 = llm_api_key1
     
-    deepl_api_key1 = config.get("DeepL_API_key") # 5225af3e-9652-80ce-c74e-307ead3e9880:fx
+    deepl_api_key1 = config.get("DeepL_API_key")
     deepl_api_key2 = config.get("Model_API_key2")
     if deepl_api_key2 is None:
         deepl_api_key2 = deepl_api_key1

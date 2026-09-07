@@ -686,7 +686,7 @@ sentence_segment: false,}@
 - *任务目标1*： 有的错误源于${f_labels["target_language2"]}翻译相比${f_labels["source_language2"]}原文的任何遗漏、冗余、或语义扭曲等错误，所以你的第一个目标是确保译文的高度准确性和质量。你要对比两者的差异，识别出${f_labels["target_language2"]}翻译中的错误，并改进翻译稿。你可以从以下几个方面入手：
     - **准确清晰**：确保译文准确传达原文的信息，没有遗漏原文的信息或增加不必要的信息。密切关注曲解、模棱两可的措辞或前后矛盾之处。
     - **语法和句法结构**：检查${f_labels["target_language2"]}译文是否符合语法规范，句子结构是否通顺。
-    - **术语正确**：确认专业术语（如果有的话）或其它用词是否合适，
+    - **术语正确**：确认术语（如果有的话）或其它用词是否合适，
     - **逻辑连贯**：确保翻译后的逻辑正确且清晰，前后连贯。
     - **风格一致**：保持译文@{wording}@的风格，确保语言表达直接且符合@{category}@领域的表达习惯。
     如果你发现了某个错误但认为这是作者为了某种特殊表达故意设计的，就忽略这个错误。
@@ -1192,12 +1192,12 @@ consolidate_mark:false
                     matches = formatted_article.match(/<\/p_.*?>/g);
                     last_paragraph = matches[matches.length - 1];
                 }
-
-                to_be_replaced =[['@{wording}@', wording, f_labels["Wording"]],
-                                ['@{category}@', category, f_labels["Category"]],
-                                ['@{glossary}@', glossary, f_labels["Glossary"]], 
-                                ['@{annotation}@', annotation, f_labels["Annotation"]], 
-                                ['@{polishing_scheme}@', polishing_scheme, f_labels["Polishing scheme"]], 
+// ['@{wording}@', wording, f_labels["Wording"]],
+//                                 ['@{category}@', category, f_labels["Category"]],
+//                                 ['@{glossary}@', glossary, f_labels["Glossary"]], 
+//                                 ['@{annotation}@', annotation, f_labels["Annotation"]], 
+//                                 ['@{polishing_scheme}@', polishing_scheme, f_labels["Polishing scheme"]], 
+                to_be_replaced =[
                                 ['@{' + article_format + '}@', formatted_article, 'formatted document'], 
                                 ['@{last_paragraph}@', last_paragraph, 'last paragraph id']]
 
@@ -1273,7 +1273,7 @@ consolidate_mark:false
             p_i = matched_p[1];
             p_content = matched_p[2];
             xml_string += `<${p_i}>\n`;
-            for (matched_s of p_content.matchAll(/(?<=<(s_\d+)>)([^]*?)(?=<\/\1>)/g)) {
+            for (matched_s of p_content.matchAll(/(?<=<(s_\d+)>)([^]*?)(?=<\/s_\d+>)/g)) {
                 s_i = matched_s[1];
                 s_content = matched_s[2];
 

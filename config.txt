@@ -1,3 +1,1 @@
-DeepL_API_key = "5225af3e-9652-80ce-c74e-307ead3e9880:fx"
-Model = "GPT (OpenAI)"
-Model_API_key = "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"
+

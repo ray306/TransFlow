@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>多文本框段落同步滚动</title>
+<style>
+  textarea {
+    width: 32%;
+    height: 100px;
+    float: left;
+    margin-right: 1%;
+    font-family: monospace;
+    white-space: pre-wrap;
+overflow-y: scroll;
+  }
+</style>
+</head>
+<body>
+
+<textarea class="sync">
+p_1: 
+第一段 Lorem ipsum...
+p_2: 
+第二段 Lorem ipsum...
+p_3: 
+第三段 Lorem ipsum...
+p_4: 
+第一段 Lorem ipsum...
+p_5: 
+第二段 Lorem ipsum...
+p_6: 
+第三段 Lorem ipsum...
+p_7: 
+第一段 Lorem ipsum...
+p_8: 
+第二段 Lorem ipsum...
+p_9: 
+第三段 Lorem ipsum...
+p_10: 
+第一段 Lorem ipsum...
+p_11: 
+第二段 Lorem ipsum...
+p_12: 
+第三段 Lorem ipsum...
+</textarea>
+
+<textarea class="sync">
+p_1: 
+第一段 AAAA...
+p_2: 
+第二段 BBBB...
+p_3: 
+第三段 CCCC...
+p_4: 
+第一段 Lorem ipsum...
+p_5: 
+第二段 Lorem ipsum...
+p_6: 
+第三段 Lorem ipsum...
+第三段 Lorem ipsum...
+第三段 Lorem ipsum...
+第三段 Lorem ipsum...
+第三段 Lorem ipsum...
+p_7: 
+第一段 Lorem ipsum...
+p_8: 
+第二段 Lorem ipsum...
+p_9: 
+第三段 Lorem ipsum...
+p_10: 
+第一段 Lorem ipsum...
+p_11: 
+第二段 Lorem ipsum...
+p_12: 
+第三段 Lorem ipsum...
+</textarea>
+
+<textarea class="sync">
+p_1: 
+段落一内容...
+p_2: 
+段落二内容...
+p_3: 
+段落三内容...
+
+第三段 Lorem ipsum...
+p_4: 
+第一段 Lorem ipsum...
+p_5: 
+第二段 Lorem ipsum...
+p_6: 
+第三段 Lorem ipsum...
+p_7: 
+第一段 Lorem ipsum...
+p_8: 
+第二段 Lorem ipsum...
+p_8: 
+第二段 Lorem ipsum...
+p_9: 
+第三段 Lorem ipsum...
+p_10: 
+第一段 Lorem ipsum...
+p_11: 
+第二段 Lorem ipsum...
+p_12: 
+第三段 Lorem ipsum...
+</textarea>
+
+<script>
+const textareas = document.querySelectorAll(".sync");
+let syncing = false;
+
+// 获取每个 textarea 中每个段落的像素位置（scrollTop）
+function computeParagraphOffsets(textarea) {
+  const text = textarea.value;
+  const lines = text.split("\n");
+  const offsets = [];
+  
+  // 临时创建一个不可见 div 来精确测量每一行高度
+  const div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.visibility = "hidden";
+  div.style.whiteSpace = "pre";
+  div.style.fontFamily = getComputedStyle(textarea).fontFamily;
+  div.style.fontSize = getComputedStyle(textarea).fontSize;
+  div.style.width = textarea.clientWidth + "px";
+  document.body.appendChild(div);
+  
+  let totalHeight = 0;
+  lines.forEach((line, i) => {
+    div.textContent = line + "\n";
+    const h = div.scrollHeight;
+    if (/^p_\d+:/i.test(line.trim())) {
+      const m = line.trim().match(/^p_(\d+):/i);
+      if (m) offsets.push({ paragraph: m[1], top: totalHeight });
+    }
+    totalHeight += h;
+  });
+  
+  document.body.removeChild(div);
+  return offsets;
+}
+
+// 预计算每个 textarea 的段落位置
+textareas.forEach(ta => {
+  ta.paragraphOffsets = computeParagraphOffsets(ta);
+});
+
+// 监听滚动
+textareas.forEach(source => {
+  source.addEventListener("scroll", () => {
+    if (syncing) return;
+    syncing = true;
+
+    // 当前滚动位置对应的段落
+    let currentParagraph = 1;
+    const scrollY = source.scrollTop;
+    for (const p of source.paragraphOffsets) {
+      if (p.top <= scrollY) currentParagraph = p.paragraph;
+    }
+
+    // 让其它文本框滚到相应段落
+    textareas.forEach(other => {
+      if (other === source) return;
+      const target = other.paragraphOffsets.find(p => p.paragraph == currentParagraph);
+      if (target) {
+        other.scrollTo({ top: target.top, behavior: "auto" });
+      }
+    });
+
+    syncing = false;
+  });
+});
+</script>
+
+</body>
+</html>

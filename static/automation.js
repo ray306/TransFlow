@@ -122,5 +122,4 @@ document.getElementById('auto_stage_all').addEventListener('click', async functi
     // switch_slide('next');
     document.getElementById("slide4_pointer").click();
     await auto_stage4();
-
 });
